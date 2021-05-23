@@ -4,11 +4,26 @@
 package com.gringrape.todo;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
-class AppTest {
-    @Test void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class AppTest {
+    @Autowired
+    WebTestClient webTestClient;
+
+    @Test
+    public void testHello() {
+        assertThat(1 + 1).isEqualTo(2);
+        webTestClient
+                .get().uri("/hello")
+                .exchange()
+                .expectStatus().isOk();
     }
 }
